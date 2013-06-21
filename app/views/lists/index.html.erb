@@ -12,17 +12,17 @@
 
 <div class="container-fluid">
 	<div class="span6">
-		<ul>
+		<ul class="lists">
 			<% @lists.each_with_index do |list, index| %>
-				<li id="<%=index%>">
+				<li>
 					<a href="#" class="lead list_title" id="<%=index%>"><%= list.title %></a>
 				</li>
-				<div id="<%index%>"></div>
 			<%end%>	
 		</ul>	
 	</div>
 		
 	<div class="span5">
+		
 		<div id="list_form">
 			<%= render 'form' %>
 		</div>
@@ -42,12 +42,25 @@
 		}); 
 		
 		$("#new_list_form").on("ajax:before", function (event) {
-			console.log("hello"); 
-			console.log(event); 
+
 		}); 
 		
-		$("#new_list_form").on("ajax:error", function (error) {
-			console.log(error); 
+		$("#new_list_form").on("ajax:success", function (event, object) {
+			var error = $("<div class='alert alert-success'></div>"); 
+			error.html("<button type='button' class='close' data-dismiss='alert'>x</button>It Works! This List Has Been Successfully Created"); 
+			$("#list_form").before(error); 
+			
+			var link = $("<a href='#' class='lead list_title' id="+object.id+ "></a>").text(object.title); 
+			console.log(link); 
+			var new_list = $("<li></li>").html(link);
+			console.log(new_list); 
+			$('.lists').append(new_list); 
+		})
+		
+		$("#new_list_form").on("ajax:error", function (error) { 
+			var error = $("<div class='alert alert-error'></div>"); 
+			error.html("<button type='button' class='close' data-dismiss='alert'>x</button>An Error Occurred With Creating This Form"); 
+			$("#list_form").before(error); 
 		})
 		
 	
