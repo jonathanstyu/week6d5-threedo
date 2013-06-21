@@ -6,12 +6,10 @@ class SessionsController < ApplicationController
       user_attributes[:password]
     )
     
-    if @user
-      redirect_to user_url(@user)
-    else
+    if !@user
       @user = User.new(user_attributes)
-      render :new
     end
+    render :json => @user
   end
 
   def new

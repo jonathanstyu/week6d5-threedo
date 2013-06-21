@@ -1,7 +1,26 @@
-<h1>Lists Of All</h1>
+<script type="text/json" charset="utf-8" id="jsonified_lists">
+	<%= @lists.to_json(:include => :items).html_safe %>
+</script>
+
+<h2>All Available Lists</h2>
+
+<ul>
+	<% @lists.each do |list| %>
+		<li><a href="#" class="lead" id="data_list_<%=list.id%>"><%= list.title %></a></li>
+	<%end%>	
+</ul>
 
 
-
-<br />
-
+<hr />
 <%= link_to 'New List', new_list_path %>
+
+<script type="text/javascript" charset="utf-8">
+	$(function () {
+		var lists = JSON.parse($('#jsonified_lists').html()); 
+		
+		$(".lead").click(function (eventObject) {
+			console.log(eventObject.target); 
+		})
+		
+	})
+</script>
