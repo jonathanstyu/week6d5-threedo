@@ -14,7 +14,7 @@
 $('#add_item').click(function (click) {
 	var list_text = $('#list_create').html(); 
 	var list_fn = _.template(list_text); 
-	var unique_id = Math.floor(Math.random() * 3); 
+	var unique_id = Math.floor(new Date().getTime()); 
 	
 	var rendered_item_cr = list_fn({variable: unique_id}); 
 	$("#item_create").append(rendered_item_cr); 

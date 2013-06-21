@@ -12,7 +12,7 @@
 </script>
 
 <div class="page-header">
-	<h2>Your Lists</h2>
+	<h2>Your To-Do Lists <small>Are you actually doing these or are you just kidding yourself?</small></h2>
 </div>
 
 <div class="container-fluid">
@@ -20,7 +20,7 @@
 		<ul class="lists">
 			<% @lists.each_with_index do |list, index| %>
 				<li>
-					<a href="#" class="lead list_title" id="<%=index%>"><%= list.title %></a>
+					<a href="#" class="lead list_title" id="<%=index%>"><%= list.title %></a><br>
 				</li>
 			<%end%>	
 		</ul>	
@@ -28,7 +28,7 @@
 		
 	<div class="span5">
 		
-		<div id="list_form">
+		<div id="list_form" class="well">
 			<%= render 'form' %>
 		</div>
 	</div>
@@ -36,10 +36,11 @@
 
 <script type="text/javascript" charset="utf-8">
 	$(function () {	
-		$("a.list_title").click(function (click) {
-			var lists = JSON.parse($('#jsonified_lists').html()); 
-			var clicked_list = lists[click.target.id]; 
-			
+		var lists = JSON.parse($('#jsonified_lists').html()); 
+		
+		$("ul.lists").on("click", "a.list_title" , function (click) {
+			var clicked_list = lists[click.target.id];
+			debugger 	
 			var template_text = $('#list_template').html(); 
 			var template_fn = _.template(template_text); 
 			var rendered_well = template_fn({list: clicked_list}); 
@@ -47,20 +48,19 @@
 		}); 
 		
 		$("#new_list_form").on("ajax:success", function (event, object) {
-			var error = $("<div class='alert alert-success'></div>"); 
-			error.html("<button type='button' class='close' data-dismiss='alert'>x</button>It Works! This List Has Been Successfully Created"); 
-			$("#list_form").before(error); 
+			var success = $("<div class='alert alert-success'></div>"); 
+			success.html("<button type='button' class='close' data-dismiss='alert'>x</button>It Works! This List Has Been Successfully Created"); 
+			$("#list_form").before(success); 
 			
-			var link = $("<a href='#' class='lead list_title' id="+object.id+ "></a>").text(object.title); 
-			console.log(link); 
+			var link = $("<a href='#' class='lead list_title' id="+(object.id-1)+ "></a>").text(object.title); 
 			var new_list = $("<li></li>").html(link);
-			console.log(new_list); 
 			$('.lists').append(new_list); 
+			lists.push(object); 
 		}); 
 		
 		$("#new_list_form").on("ajax:error", function (error) { 
 			var error = $("<div class='alert alert-error'></div>"); 
-			error.html("<button type='button' class='close' data-dismiss='alert'>x</button>An Error Occurred With Creating This Form"); 
+			error.html("<button type='button' class='close' data-dismiss='alert'>x</button>An Error Occurred In Creating This Form"); 
 			$("#list_form").before(error); 
 		}); 
 		

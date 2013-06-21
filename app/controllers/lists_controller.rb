@@ -25,11 +25,9 @@ class ListsController < ApplicationController
   # GET /lists/new.json
   def new
     @list = List.new
+    
+    render json: @list.to_json(:include => :items)
 
-    respond_to do |format|
-      format.html # new.html.erb
-      format.json { render json: @list }
-    end
   end
 
   # GET /lists/1/edit
@@ -45,7 +43,8 @@ class ListsController < ApplicationController
     respond_to do |format|
       if @list.save
         format.html { redirect_to @list, notice: 'List was successfully created.' }
-        format.json { render json: @list, status: :created, location: @list }
+        # This is not singular. It is plural 
+        format.json { render json: @list.to_json(:include => :items), status: :created, location: @list }
       else
         format.html { render action: "new" }
         format.json { render json: @list.errors, status: :unprocessable_entity }
