@@ -1,17 +1,2 @@
-<%= form_for(@item) do |f| %>
-  <% if @item.errors.any? %>
-    <div id="error_explanation">
-      <h2><%= pluralize(@item.errors.count, "error") %> prohibited this item from being saved:</h2>
-
-      <ul>
-      <% @item.errors.full_messages.each do |msg| %>
-        <li><%= msg %></li>
-      <% end %>
-      </ul>
-    </div>
-  <% end %>
-
-  <div class="actions">
-    <%= f.submit %>
-  </div>
-<% end %>
+<input type="text" name="list[items_attributes][<%= variable %>][goal]" value="" id="item_goal">
+<input type="date" name="list[items_attributes][<%= variable %>][due_date]" value="" id="due_date">

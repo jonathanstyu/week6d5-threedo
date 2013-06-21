@@ -7,5 +7,16 @@
 		
 		</div><!-- #item_create -->
 	<hr />
-	<p><input type="submit" value="Create List &rarr;" class="btn btn-primary"></p>
+	<p><input type="submit" value="Create List &rarr;" class="btn btn-primary btn-large"></p>
 </form>
+
+<script type="text/javascript" charset="utf-8">
+$('#add_item').click(function (click) {
+	var list_text = $('#list_create').html(); 
+	var list_fn = _.template(list_text); 
+	var unique_id = Math.floor(Math.random() * 3); 
+	
+	var rendered_item_cr = list_fn({variable: unique_id}); 
+	$("#item_create").append(rendered_item_cr); 
+})
+</script>
