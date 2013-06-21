@@ -8,6 +8,24 @@
 </head>
 
 <body>
-  <%= yield %>
+	<div class="navbar">
+		<div class="navbar-inner">
+			<a href="#" class="brand">
+				User: <%= current_user ? current_user.username : "Not Logged In"%>
+			</a>
+			<ul class='nav'>
+				<li class='divider-vertical'></li>
+				<li><a href="#">Stuff</a></li>
+				<li class='divider-vertical'></li>
+				<li><a href="#">More Stuff</a></li>
+				<li class='divider-vertical'></li>
+			</ul>
+		</div>
+	</div>
+	
+	<div class="span12" id="content">
+		<%= yield %>
+	</div>
+  
 </body>
 </html>

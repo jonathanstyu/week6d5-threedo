@@ -1,3 +1,8 @@
+User.create(username: "jon", password: "jon")
+User.create(username: "adam", password: "adam")
+User.create(username: "yaya", password: "yaya")
+
+
 List.create(title: "Toru's todos")
 List.create(title: "Your cat's day")
 List.create(title: "totoro's todos")
