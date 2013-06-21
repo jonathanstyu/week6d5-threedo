@@ -4,9 +4,9 @@ AjaxDemo::Application.routes.draw do
   resource :session, :only => [:new, :create, :destroy]
   resources :users
   
-  resources :lists do
+  resources :lists, :only => [:index, :create, :destroy] do
     resources :items, :only => [:new, :create, :destroy]
   end
   
-  resources :items, :except => [:new, :create, :destroy]
+  # resources :items, :except => [:new, :create, :destroy]
 end

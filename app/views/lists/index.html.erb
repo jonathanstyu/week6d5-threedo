@@ -1,26 +1,55 @@
+<script type="text" charset="utf-8" id="list_template">
+	<%= File.read("./app/views/items/_item.html").html_safe %>
+</script>
+
 <script type="text/json" charset="utf-8" id="jsonified_lists">
 	<%= @lists.to_json(:include => :items).html_safe %>
 </script>
 
-<h2>All Available Lists</h2>
+<div class="page-header">
+	<h2>Your Lists</h2>
+</div>
 
-<ul>
-	<% @lists.each do |list| %>
-		<li><a href="#" class="lead" id="data_list_<%=list.id%>"><%= list.title %></a></li>
-	<%end%>	
-</ul>
-
-
-<hr />
-<%= link_to 'New List', new_list_path %>
+<div class="container-fluid">
+	<div class="span6">
+		<ul>
+			<% @lists.each_with_index do |list, index| %>
+				<li id="<%=index%>">
+					<a href="#" class="lead list_title" id="<%=index%>"><%= list.title %></a>
+				</li>
+				<div id="<%index%>"></div>
+			<%end%>	
+		</ul>	
+	</div>
+		
+	<div class="span5">
+		<div id="list_form">
+			<%= render 'form' %>
+		</div>
+	</div>
+</div>
 
 <script type="text/javascript" charset="utf-8">
-	$(function () {
-		var lists = JSON.parse($('#jsonified_lists').html()); 
+	$(function () {	
+		$("a.list_title").click(function (click) {
+			var lists = JSON.parse($('#jsonified_lists').html()); 
+			var clicked_list = lists[click.target.id]; 
+			
+			var template_text = $('#list_template').html(); 
+			var template_fn = _.template(template_text); 
+			var rendered_well = template_fn({list: clicked_list}); 
+			$(click.target).after(rendered_well); 
+		}); 
 		
-		$(".lead").click(function (eventObject) {
-			console.log(eventObject.target); 
+		$("#new_list_form").on("ajax:before", function (event) {
+			console.log("hello"); 
+			console.log(event); 
+		}); 
+		
+		$("#new_list_form").on("ajax:error", function (error) {
+			console.log(error); 
 		})
 		
-	})
+	
+	}); 
 </script>

@@ -1,17 +1,11 @@
-<%= form_for(@list) do |f| %>
-  <% if @list.errors.any? %>
-    <div id="error_explanation">
-      <h2><%= pluralize(@list.errors.count, "error") %> prohibited this list from being saved:</h2>
-
-      <ul>
-      <% @list.errors.full_messages.each do |msg| %>
-        <li><%= msg %></li>
-      <% end %>
-      </ul>
-    </div>
-  <% end %>
-
-  <div class="actions">
-    <%= f.submit %>
-  </div>
-<% end %>
+<h4>Create a New Form</h4>
+<form action="<%= new_list_path %>" method="post" data-remote=true id="new_list_form" class="form-inline">
+	<input type="hidden" name="authenticity_token" value="<%= form_authenticity_token %>">
+	<input type="text" name="list[title]" value="" id="title_box" placeholder="List's Title">
+	<a href="#" class="btn" id="add_item">Add an Item</a>
+		<div id="item_create">
+		
+		</div><!-- #item_create -->
+	<hr />
+	<p><input type="submit" value="Create List &rarr;" class="btn btn-primary"></p>
+</form>
