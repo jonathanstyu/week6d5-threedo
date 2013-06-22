@@ -39,8 +39,7 @@
 		var lists = JSON.parse($('#jsonified_lists').html()); 
 		
 		$("ul.lists").on("click", "a.list_title" , function (click) {
-			var clicked_list = lists[click.target.id];
-			debugger 	
+			var clicked_list = lists[click.target.id]; 	
 			var template_text = $('#list_template').html(); 
 			var template_fn = _.template(template_text); 
 			var rendered_well = template_fn({list: clicked_list}); 
@@ -63,7 +62,6 @@
 			error.html("<button type='button' class='close' data-dismiss='alert'>x</button>An Error Occurred In Creating This Form"); 
 			$("#list_form").before(error); 
 		}); 
-		
-	
+			
 	}); 
 </script>

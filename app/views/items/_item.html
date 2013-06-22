@@ -3,10 +3,12 @@
 	<h5>Items for <%= list.title %></h5>
 	<ul>
 		<% list.items.forEach(function (item, index) { %>
-			<li>Goal: <%= item.goal %></li>
-			<% if (item.due_date > 0) { %>
-				<li>Due Date: <%= item.due_date %></li>
+			<li id="<%=list.id%>-<%= item.id %>"><span class="label label-info">Goal:</span> <%= item.goal %>
+			<% if (item.due_date) { %>
+				 <br><span class="label label-default">Due by:</span> <%= item.due_date %>
 			<% } %>
+			<br><br><a href="#" class="btn btn-mini btn-danger deleteButton" id="<%=list.id%>-<%= item.id %>">Delete</a><br><br>
+			</li>
 		<% }) %>		
 	</ul>	
 	<br>	
@@ -15,8 +17,21 @@
 </div>
 
 <script type="text/javascript" charset="utf-8">
-	$("#remove_link").click(function (click) {
-		$("#name").remove(); 
-	}); 
-	
+		$("#remove_link").click(function (click) {
+			$("#name").remove(); 
+		}); 
+
+		$('a.deleteButton').on("click", function (click) {
+			var ids = (click.target.id).split("-"); 
+			var url = "/lists/" + ids[0] + "/items/"+ids[1]; 
+			$.ajax({
+				url: url, 
+				type: 'delete'
+			}).done(function (object) {
+				$('li #'+click.target.id).remove(); 
+			}).fail(function (error) {
+				console.log(error); 
+			})
+		}); 
+		
 </script>
