@@ -6,6 +6,9 @@
 	<%= File.read("./app/views/items/_item_create.html").html_safe %>
 </script>
 
+<script type="text" charset="utf-8" id="overall_list_template">
+	<%= File.read("./app/views/lists/_list.html").html_safe %>
+</script>
 
 <script type="text/json" charset="utf-8" id="jsonified_lists">
 	<%= @lists.to_json(:include => :items).html_safe %>
@@ -18,11 +21,6 @@
 <div class="container-fluid">
 	<div class="span6">
 		<ul class="lists">
-			<% @lists.each_with_index do |list, index| %>
-				<li>
-					<a href="#" class="lead list_title" id="<%=index%>"><%= list.title %></a><br>
-				</li>
-			<%end%>	
 		</ul>	
 	</div>
 		
@@ -38,8 +36,15 @@
 	$(function () {	
 		var lists = JSON.parse($('#jsonified_lists').html()); 
 		
+		lists.forEach(function (list, index) {
+			var list_text = $("#overall_list_template").html(); 
+			var list_fn = _.template(list_text); 
+			var rendered = list_fn({index: index, list: list}); 
+			$("ul.lists").append(rendered); 
+		}); 
+		
 		$("ul.lists").on("click", "a.list_title" , function (click) {
-			var clicked_list = lists[click.target.id]; 	
+			var clicked_list = lists[click.target.id-1]; 	
 			var template_text = $('#list_template').html(); 
 			var template_fn = _.template(template_text); 
 			var rendered_well = template_fn({list: clicked_list}); 
@@ -51,8 +56,9 @@
 			success.html("<button type='button' class='close' data-dismiss='alert'>x</button>It Works! This List Has Been Successfully Created"); 
 			$("#list_form").before(success); 
 			
-			var link = $("<a href='#' class='lead list_title' id="+(object.id-1)+ "></a>").text(object.title); 
-			var new_list = $("<li></li>").html(link);
+			var list_text = $("#overall_list_template").html(); 
+			var list_fn = _.template(list_text); 
+			var new_list = list_fn({list: object, index: object.id}); 
 			$('.lists').append(new_list); 
 			lists.push(object); 
 		}); 
@@ -62,6 +68,21 @@
 			error.html("<button type='button' class='close' data-dismiss='alert'>x</button>An Error Occurred In Creating This Form"); 
 			$("#list_form").before(error); 
 		}); 
+		
+		$("a.list_delete").on('click', function (click) {
+			var list_id = click.target.id; 
+			var url = "/lists/" + list_id; 
+			$.ajax({
+				url: url,
+				dataType: "json",
+				type: "delete"
+			}).done(function (object) {
+				lists.slice(lists.indexOf(object) ,1); 
+				$('#list_id').remove(); 
+			}).fail(function (error) {
+				console.log(error);
+			})
+		})
 			
 	}); 
 </script>
