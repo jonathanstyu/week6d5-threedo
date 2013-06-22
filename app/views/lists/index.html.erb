@@ -39,7 +39,7 @@
 		lists.forEach(function (list, index) {
 			var list_text = $("#overall_list_template").html(); 
 			var list_fn = _.template(list_text); 
-			var rendered = list_fn({index: index, list: list}); 
+			var rendered = list_fn({index: (index+1), list: list}); 
 			$("ul.lists").append(rendered); 
 		}); 
 		
@@ -72,13 +72,15 @@
 		$("a.list_delete").on('click', function (click) {
 			var list_id = click.target.id; 
 			var url = "/lists/" + list_id; 
+			debugger
 			$.ajax({
 				url: url,
 				dataType: "json",
 				type: "delete"
 			}).done(function (object) {
-				lists.slice(lists.indexOf(object) ,1); 
-				$('#list_id').remove(); 
+				lists.slice(lists.indexOf(object),1); 
+				console.log($('li #'+object.id)); 
+				$('li #'+object.id).remove(); 
 			}).fail(function (error) {
 				console.log(error);
 			})
